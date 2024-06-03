@@ -5,6 +5,13 @@ import (
 	"testing"
 )
 
+func AssertEqual[T comparable](t *testing.T, got, want T) {
+	t.Helper()
+	if got != want {
+		t.Errorf("want %v but got %v", want, got)
+	}
+}
+
 func TestSum(t *testing.T) {
 	t.Run("collection of 5 numbers", func(t *testing.T) {
 		numbers := []int{1, 2, 3, 4, 5}
