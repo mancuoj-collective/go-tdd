@@ -1,6 +1,7 @@
 package arrays
 
 import (
+	"reflect"
 	"testing"
 )
 
@@ -18,4 +19,12 @@ func TestSum(t *testing.T) {
 		want := 6
 		AssertEqual(t, got, want)
 	})
+}
+
+func TestSumAll(t *testing.T) {
+	got := SumAll([]int{1, 2}, []int{0, 9})
+	want := []int{3, 9}
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("want %v but got %v", want, got)
+	}
 }
