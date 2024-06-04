@@ -67,7 +67,6 @@ func TestDelete(t *testing.T) {
 		dictionary := Dictionary{}
 
 		err := dictionary.Delete(word)
-
 		assertError(t, err, ErrWordDoesNotExist)
 	})
 }
