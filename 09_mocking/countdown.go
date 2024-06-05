@@ -9,16 +9,25 @@ type Sleeper interface {
 	Sleep()
 }
 
-type SpySleeper struct {
-	Calls int
+type SpyCountdownOperations struct {
+	Calls []string
 }
 
-func (s *SpySleeper) Sleep() {
-	s.Calls++
+func (s *SpyCountdownOperations) Sleep() {
+	s.Calls = append(s.Calls, sleep)
 }
 
-const finalWord = "Go!"
-const countdownStart = 3
+func (s *SpyCountdownOperations) Write(p []byte) (n int, err error) {
+	s.Calls = append(s.Calls, write)
+	return
+}
+
+const (
+	countdownStart = 3
+	finalWord      = "Go!"
+	write          = "write"
+	sleep          = "sleep"
+)
 
 func Countdown(out io.Writer, sleeper Sleeper) {
 	for i := countdownStart; i > 0; i-- {
