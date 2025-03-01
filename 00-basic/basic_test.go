@@ -125,3 +125,17 @@ func TestSumAllTails(t *testing.T) {
 		checkSums(t, got, want)
 	})
 }
+
+func TestPerimeter(t *testing.T) {
+	got := Perimeter(10.0, 10.0)
+	want := 40.0
+
+	AssertEqual(t, got, want)
+}
+
+func TestArea(t *testing.T) {
+	got := Area(12.0, 6.0)
+	want := 72.0
+
+	AssertEqual(t, got, want)
+}
