@@ -1,6 +1,9 @@
 package hello
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestHello(t *testing.T) {
 	t.Run("saying hello to people", func(t *testing.T) {
@@ -34,9 +37,48 @@ func TestHello(t *testing.T) {
 	})
 }
 
-func assertCorrectMessage(t testing.TB, got, want string) {
+func assertCorrectMessage[T comparable](t testing.TB, got, want T) {
 	t.Helper()
 	if got != want {
-		t.Errorf("got %q want %q", got, want)
+		t.Errorf("got %v but want %v", got, want)
+	}
+}
+
+func TestAdder(t *testing.T) {
+	sum := Add(2, 2)
+	expected := 4
+
+	assertCorrectMessage(t, sum, expected)
+}
+
+func ExampleAdd() {
+	sum := Add(1, 5)
+	fmt.Println(sum)
+	// Output: 6
+}
+
+func TestRepeat(t *testing.T) {
+	repeated := Repeat1("a", 5)
+	expected := "aaaaa"
+
+	assertCorrectMessage(t, repeated, expected)
+}
+
+func BenchmarkRepeat1(b *testing.B) {
+	// for i := 0; i < b.N; i++ {
+	for b.Loop() {
+		Repeat1("a", 5)
+	}
+}
+
+func BenchmarkRepeat2(b *testing.B) {
+	for b.Loop() {
+		Repeat2("a", 5)
+	}
+}
+
+func BenchmarkRepeat3(b *testing.B) {
+	for b.Loop() {
+		Repeat3("a", 5)
 	}
 }
