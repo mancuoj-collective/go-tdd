@@ -1,6 +1,8 @@
 package basic
 
 import (
+	"errors"
+	"fmt"
 	"math"
 	"strings"
 )
@@ -140,3 +142,37 @@ func (c Circle) Area() float64 {
 func (t Triangle) Area() float64 {
 	return (t.Base * t.Height) / 2
 }
+
+// 06 pointers errors
+type Bitcoin int
+
+func (b Bitcoin) String() string {
+	return fmt.Sprintf("%d BTC", b)
+}
+
+type Wallet struct {
+	balance Bitcoin
+}
+
+// a pointer to that wallet so we can change the original value
+func (w *Wallet) Deposit(amount Bitcoin) {
+	// (*w).balance automatically dereferences the pointer
+	// so we can just use w.balance
+	w.balance += amount
+}
+
+func (w *Wallet) Balance() Bitcoin {
+	return w.balance
+}
+
+var ErrInsufficientFunds = errors.New("cannot withdraw, insufficient funds")
+
+func (w *Wallet) Withdraw(amount Bitcoin) error {
+	if amount > w.balance {
+		return ErrInsufficientFunds
+	}
+	w.balance -= amount
+	return nil
+}
+
+// 07 maps

@@ -29,3 +29,21 @@ func AssertFalse(t testing.TB, got bool) {
 		t.Errorf("got %v but want false", got)
 	}
 }
+
+func AssertNoError(t testing.TB, got error) {
+	t.Helper()
+	if got != nil {
+		t.Fatal("got an error but didn't want one")
+	}
+}
+
+func AssertError(t testing.TB, got error, want error) {
+	t.Helper()
+	if got == nil {
+		t.Fatal("didn't get an error but wanted one")
+	}
+
+	if got != want {
+		t.Errorf("got %s, want %s", got, want)
+	}
+}

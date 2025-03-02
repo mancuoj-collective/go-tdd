@@ -6,6 +6,7 @@ import (
 	"testing"
 )
 
+// 01
 func TestHello(t *testing.T) {
 	t.Run("saying hello to people", func(t *testing.T) {
 		got := Hello("Chris", "")
@@ -38,6 +39,7 @@ func TestHello(t *testing.T) {
 	})
 }
 
+// 02
 func TestAdder(t *testing.T) {
 	sum := Add(2, 2)
 	expected := 4
@@ -51,6 +53,7 @@ func ExampleAdd() {
 	// Output: 6
 }
 
+// 03
 func TestRepeat1(t *testing.T) {
 	repeated := Repeat1("a", 5)
 	expected := "aaaaa"
@@ -58,6 +61,7 @@ func TestRepeat1(t *testing.T) {
 	AssertEqual(t, repeated, expected)
 }
 
+// go test -bench=.
 func BenchmarkRepeat1(b *testing.B) {
 	// for i := 0; i < b.N; i++ {
 	for b.Loop() {
@@ -77,6 +81,7 @@ func BenchmarkRepeat3(b *testing.B) {
 	}
 }
 
+// 04
 // go test -cover
 func TestSum(t *testing.T) {
 	t.Run("collection of 5 numbers", func(t *testing.T) {
@@ -126,6 +131,7 @@ func TestSumAllTails(t *testing.T) {
 	})
 }
 
+// 05
 func TestPerimeter(t *testing.T) {
 	got := Perimeter(10.0, 10.0)
 	want := 40.0
@@ -160,4 +166,39 @@ func TestArea2(t *testing.T) {
 			}
 		})
 	}
+}
+
+// 06
+func TestWallet(t *testing.T) {
+	assertBalance := func(t testing.TB, wallet Wallet, want Bitcoin) {
+		t.Helper()
+		got := wallet.Balance()
+
+		if got != want {
+			t.Errorf("got %s want %s", got, want)
+		}
+	}
+
+	t.Run("deposit", func(t *testing.T) {
+		wallet := Wallet{}
+		wallet.Deposit(Bitcoin(10))
+
+		assertBalance(t, wallet, Bitcoin(10))
+	})
+
+	t.Run("withdraw with funds", func(t *testing.T) {
+		wallet := Wallet{Bitcoin(20)}
+		err := wallet.Withdraw(Bitcoin(10))
+
+		AssertNoError(t, err)
+		assertBalance(t, wallet, Bitcoin(10))
+	})
+
+	t.Run("withdraw insufficient funds", func(t *testing.T) {
+		wallet := Wallet{Bitcoin(20)}
+		err := wallet.Withdraw(Bitcoin(100))
+
+		AssertError(t, err, ErrInsufficientFunds)
+		assertBalance(t, wallet, Bitcoin(20))
+	})
 }
