@@ -1,6 +1,9 @@
 package basic
 
-import "strings"
+import (
+	"math"
+	"strings"
+)
 
 // 01 Constants
 const (
@@ -103,4 +106,37 @@ func Perimeter(width, height float64) float64 {
 
 func Area(width, height float64) float64 {
 	return width * height
+}
+
+// not implement
+// just has a method called Area and returns a float64
+// any type that has this method is said to implement the Shape interface
+type Shape interface {
+	Area() float64
+}
+
+type Rectangle struct {
+	Width  float64
+	Height float64
+}
+
+type Circle struct {
+	Radius float64
+}
+
+type Triangle struct {
+	Base   float64
+	Height float64
+}
+
+func (r Rectangle) Area() float64 {
+	return r.Width * r.Height
+}
+
+func (c Circle) Area() float64 {
+	return math.Pi * c.Radius * c.Radius
+}
+
+func (t Triangle) Area() float64 {
+	return (t.Base * t.Height) / 2
 }
