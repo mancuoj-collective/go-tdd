@@ -1,8 +1,9 @@
-package di
+package main
 
 import (
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 )
 
@@ -14,7 +15,7 @@ func Greet(writer io.Writer, name string) {
 }
 
 // 就像此处，Greet 并不知道它在处理 HTTP 响应，只是将输出写入到传入的 writer
-func GreetHandler(w http.ResponseWriter, r *http.Request) {
+func MyGreeterHandler(w http.ResponseWriter, r *http.Request) {
 	Greet(w, "World")
 }
 
@@ -23,3 +24,6 @@ func GreetHandler(w http.ResponseWriter, r *http.Request) {
 // 想象一个咖啡机（Greet 函数）需要水（io.Writer）来制作咖啡（输出结果）。
 // 没有依赖注入：咖啡机自己去取水（比如直接用自来水 os.Stdout），这限制了它只能用一种水源。
 // 使用依赖注入：你给咖啡机提供水（通过参数传入 io.Writer），可以是自来水、矿泉水、或蒸馏水（os.Stdout、bytes.Buffer、http.ResponseWriter），咖啡机只负责冲泡咖啡，不关心水的来源。
+func main() {
+	log.Fatal(http.ListenAndServe(":5555", http.HandlerFunc(MyGreeterHandler)))
+}
