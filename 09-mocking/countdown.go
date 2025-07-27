@@ -3,6 +3,7 @@ package mocking
 import (
 	"fmt"
 	"io"
+	"iter"
 	"time"
 )
 
@@ -20,12 +21,27 @@ func (c *ConfigurableSleeper) Sleep() {
 }
 
 const finalWord = "Go!"
-const countdownStart = 3
+
+// func(func(T) bool) === iter.Seq[T]
+func countdownFrom(from int) iter.Seq[int] {
+	return func(yield func(int) bool) {
+		for i := from; i > 0; i-- {
+			if !yield(i) {
+				return
+			}
+		}
+	}
+}
 
 func Countdown(writer io.Writer, sleeper Sleeper) {
-	for i := countdownStart; i > 0; i-- {
+	for i := range countdownFrom(3) {
 		fmt.Fprintln(writer, i)
 		sleeper.Sleep()
 	}
 	fmt.Fprint(writer, finalWord)
 }
+
+// func main() {
+// 	sleeper := &ConfigurableSleeper{1 * time.Second, time.Sleep}
+// 	Countdown(os.Stdout, sleeper)
+// }
